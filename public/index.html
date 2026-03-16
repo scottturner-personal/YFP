@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Financial Viability Planner</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- Loading skeleton (shown until data loads) -->
+<div id="app-loading" class="app-loading">
+  <div class="page-content">
+    <div class="cards-grid-4">
+      <div class="skeleton sk-overview-card"></div>
+      <div class="skeleton sk-overview-card"></div>
+      <div class="skeleton sk-overview-card"></div>
+      <div class="skeleton sk-overview-card"></div>
+    </div>
+    <div class="cards-grid-2">
+      <div class="skeleton sk-event-card"></div>
+      <div class="skeleton sk-event-card"></div>
+    </div>
+    <div class="skeleton sk-chart-card"></div>
+    <div class="bottom-grid">
+      <div class="skeleton sk-sm-card"></div>
+      <div class="skeleton sk-sm-card"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Alert Banner -->
+<div id="alert-banner" class="alert-banner hidden">
+  <span class="alert-icon">&#9888;</span>
+  Warning: Your balance is projected to go negative on <strong id="negative-date"></strong>
+</div>
+
+<!-- Top Bar -->
+<header class="top-bar">
+  <div class="app-brand">Financial Viability Planner</div>
+  <nav class="nav-tabs">
+    <button class="nav-tab active" data-tab="dashboard">Dashboard</button>
+    <button class="nav-tab" data-tab="configure">Configure</button>
+    <button class="nav-tab" data-tab="projection">Projection</button>
+  </nav>
+  <div class="top-bar-date" id="top-bar-date"></div>
+</header>
+
+<!-- ── Dashboard Tab ───────────────────────────────────────────────────── -->
+<div id="tab-dashboard" class="tab-pane active">
+  <div class="page-content">
+
+    <!-- Row 1: Financial Overview Cards -->
+    <div class="cards-grid-4">
+      <div class="card overview-card" id="card-balance">
+        <div class="card-label">Current Balance</div>
+        <div class="card-value" id="dash-balance">£—</div>
+      </div>
+      <div class="card overview-card">
+        <div class="card-label">Monthly Income</div>
+        <div class="card-value color-income" id="dash-income">£—</div>
+      </div>
+      <div class="card overview-card">
+        <div class="card-label">Monthly Outgoings</div>
+        <div class="card-value" id="dash-outgoings">£—</div>
+      </div>
+      <div class="card overview-card">
+        <div class="card-label">Net Monthly</div>
+        <div class="card-value" id="dash-net">£—</div>
+      </div>
+    </div>
+
+    <!-- Row 2: Next Events -->
+    <div class="cards-grid-2">
+      <div class="card event-card">
+        <div class="card-label">Next Bill</div>
+        <div class="event-name" id="next-bill-name">—</div>
+        <div class="event-amount color-bill" id="next-bill-amount">£—</div>
+        <div class="event-meta">
+          <span class="event-date" id="next-bill-date">—</span>
+          <span class="event-badge badge-bill" id="next-bill-days">—</span>
+        </div>
+      </div>
+      <div class="card event-card">
+        <div class="card-label">Next Pay Day</div>
+        <div class="event-name" id="next-pay-name">—</div>
+        <div class="event-amount color-income" id="next-pay-amount">£—</div>
+        <div class="event-meta">
+          <span class="event-date" id="next-pay-date">—</span>
+          <span class="event-badge badge-pay" id="next-pay-days">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 3: Balance Forecast Chart -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">12-Month Balance Forecast</h2>
+      </div>
+      <div class="chart-container-tall">
+        <canvas id="balance-chart"></canvas>
+      </div>
+    </div>
+
+    <!-- Row 3.5: Payment Holidays -->
+    <div class="card hidden" id="skip-card">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">🏖 Payment Holidays</h2>
+          <p class="card-subtitle">Dates Jess doesn't need to pay in — balance stays positive throughout</p>
+        </div>
+        <button class="proj-export-btn" id="export-holidays-ics">&#128197; Add to Calendar</button>
+      </div>
+      <ul class="skip-list" id="skip-list"></ul>
+    </div>
+
+    <!-- Row 4: Breakdown + Upcoming Events -->
+    <div class="bottom-grid">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Monthly Spend by Category</h2>
+        </div>
+        <div class="chart-container-sm">
+          <canvas id="breakdown-chart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Upcoming Events</h2>
+        </div>
+        <ul class="events-list" id="upcoming-events-list"></ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── Configure Tab ───────────────────────────────────────────────────── -->
+<div id="tab-configure" class="tab-pane hidden">
+  <div class="page-content cfg-page">
+
+    <!-- Balance -->
+    <div class="card cfg-balance-card">
+      <div class="cfg-balance-label">Current Balance</div>
+      <div class="cfg-balance-row">
+        <span class="cfg-currency-lg">£</span>
+        <input type="number" id="current-balance" class="cfg-balance-input"
+               step="0.01" placeholder="0.00">
+      </div>
+      <p class="cfg-hint">Saves automatically as you type</p>
+    </div>
+
+    <!-- Income -->
+    <section class="cfg-section">
+      <div class="cfg-section-header">
+        <div class="cfg-section-title-group">
+          <h2 class="cfg-section-title">Income</h2>
+          <span class="cfg-count" id="income-count"></span>
+        </div>
+        <button class="btn-add" id="add-income-btn">+ Add Income</button>
+      </div>
+      <div class="cfg-cards-grid" id="income-cards"></div>
+    </section>
+
+    <!-- Bills -->
+    <section class="cfg-section">
+      <div class="cfg-section-header">
+        <div class="cfg-section-title-group">
+          <h2 class="cfg-section-title">Recurring Bills</h2>
+          <span class="cfg-count" id="bills-count"></span>
+        </div>
+        <button class="btn-add" id="add-bill-btn">+ Add Bill</button>
+      </div>
+
+      <!-- Search & Sort -->
+      <div class="cfg-toolbar">
+        <div class="cfg-search-wrap">
+          <span class="cfg-search-icon">&#128269;</span>
+          <input type="text" id="bills-search" class="cfg-search-input"
+                 placeholder="Search bills…" autocomplete="off">
+        </div>
+        <div class="cfg-sort-group" id="bills-sort-btns">
+          <button class="sort-btn active" data-sort="date">By Date</button>
+          <button class="sort-btn" data-sort="amount">By Amount</button>
+          <button class="sort-btn" data-sort="name">A–Z</button>
+        </div>
+      </div>
+
+      <div class="cfg-cards-grid" id="bill-cards"></div>
+    </section>
+
+    <!-- Summary Footer -->
+    <div class="cfg-footer" id="cfg-footer">
+      <div class="cfg-footer-item">
+        <span class="cfg-footer-label">Monthly Outgoings</span>
+        <span class="cfg-footer-val negative" id="cfg-total-out">£—</span>
+      </div>
+      <div class="cfg-footer-sep"></div>
+      <div class="cfg-footer-item">
+        <span class="cfg-footer-label">Monthly Income</span>
+        <span class="cfg-footer-val positive" id="cfg-total-in">£—</span>
+      </div>
+      <div class="cfg-footer-sep"></div>
+      <div class="cfg-footer-item">
+        <span class="cfg-footer-label">Surplus / Deficit</span>
+        <span class="cfg-footer-val" id="cfg-net">£—</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── Projection Tab ──────────────────────────────────────────────────── -->
+<div id="tab-projection" class="tab-pane hidden">
+  <div class="page-content proj-page">
+
+    <!-- Header: title + summary stats -->
+    <div class="proj-header">
+      <div class="proj-header-left">
+        <h2 class="proj-title">3-Year Daily Projection</h2>
+        <p class="proj-subtitle">Today through <span id="proj-end-date">—</span></p>
+      </div>
+      <div class="proj-stats-bar">
+        <div class="proj-stat">
+          <span class="proj-stat-label">First Risk</span>
+          <span class="proj-stat-val" id="proj-first-risk">—</span>
+        </div>
+        <div class="proj-stat-sep"></div>
+        <div class="proj-stat">
+          <span class="proj-stat-label">3-Year Income</span>
+          <span class="proj-stat-val positive" id="proj-total-income">—</span>
+        </div>
+        <div class="proj-stat-sep"></div>
+        <div class="proj-stat">
+          <span class="proj-stat-label">3-Year Bills</span>
+          <span class="proj-stat-val" id="proj-total-bills">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls bar -->
+    <div class="proj-controls">
+      <div class="proj-mode-toggle" id="proj-mode-toggle">
+        <button class="proj-toggle-btn active" data-mode="events">Event Days</button>
+        <button class="proj-toggle-btn" data-mode="all">All Days</button>
+      </div>
+      <div class="proj-month-nav">
+        <button class="proj-nav-btn" id="proj-prev-month">&#8249;</button>
+        <select class="proj-month-select" id="proj-month-select"></select>
+        <button class="proj-nav-btn" id="proj-next-month">&#8250;</button>
+      </div>
+      <button class="proj-risk-btn hidden" id="proj-jump-risk">&#9888; Jump to First Risk</button>
+      <button class="proj-export-btn" id="proj-export-csv">&#8659; Export CSV</button>
+    </div>
+
+    <!-- Table -->
+    <div class="card proj-table-card">
+      <div class="proj-table-wrap">
+        <table class="proj-table">
+          <thead>
+            <tr>
+              <th class="col-date">Date</th>
+              <th class="col-day">Day</th>
+              <th class="col-num">Start Balance</th>
+              <th class="col-events">Income</th>
+              <th class="col-events">Bills</th>
+              <th class="col-num">Net</th>
+              <th class="col-num">End Balance</th>
+            </tr>
+          </thead>
+          <tbody id="proj-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal overlay -->
+<div id="modal-overlay" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title"></h3>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/projection.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/projection-view.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

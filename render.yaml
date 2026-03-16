@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: financial-viability-planner
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: DATA_FILE
+        value: /data/data.json
+    disk:
+      name: appdata
+      mountPath: /data
+      sizeGB: 1
