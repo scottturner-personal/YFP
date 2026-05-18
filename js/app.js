@@ -17,12 +17,11 @@ async function init() {
   initConfigureControls();
   ProjectionView.init();
 
-  // Only the network fetch is wrapped — render errors must not be swallowed here.
   try {
     appData = await store.init();
   } catch (err) {
     console.error('Failed to load data:', err);
-    showToast('Could not connect to server. Make sure it is running on port 3000.', 'toast-error', 6000);
+    showToast('Could not load saved data.', 'toast-error', 6000);
     document.getElementById('app-loading')?.remove();
     return;
   }
