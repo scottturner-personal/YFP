@@ -88,6 +88,16 @@ const Projection = (() => {
 
   // ── Income helpers ─────────────────────────────────────────────────────────
 
+  // Returns the effective income amount for a source on a given date.
+  // Checks source.amount_overrides (keyed by "YYYY-MM") for one-off adjustments.
+  function getEffectiveAmount(source, date) {
+    if (source.amount_overrides) {
+      const key = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0');
+      if (key in source.amount_overrides) return source.amount_overrides[key];
+    }
+    return source.amount;
+  }
+
   // Returns the next Date (>= fromDate) when an income source pays, or null.
   function nextIncomePayDate(source, fromDate) {
     if (source.type === 'monthly') {
@@ -194,8 +204,9 @@ const Projection = (() => {
         }
 
         if (isPaid) {
-          balance += source.amount;
-          incomeReceived.push({ name: source.name, amount: source.amount, incomeId: source.id });
+          const amt = getEffectiveAmount(source, date);
+          balance += amt;
+          incomeReceived.push({ name: source.name, amount: amt, incomeId: source.id });
         }
       }
 
@@ -380,8 +391,9 @@ const Projection = (() => {
       0
     );
 
+    const monthDate = new Date(yr, mo0, 1);
     const income = data.income.reduce((sum, source) => {
-      if (source.type === 'monthly') return sum + source.amount;
+      if (source.type === 'monthly') return sum + getEffectiveAmount(source, monthDate);
       if (source.type === 'every_4_weeks') {
         const mStart = new Date(yr, mo0, 1);
         const mEnd   = new Date(yr, mo0 + 1, 0);
@@ -431,13 +443,15 @@ const Projection = (() => {
         const day = dailyProjection[i];
         if (!day.incomeReceived.some(r => r.incomeId === source.id)) continue;
 
+        const payDate = new Date(day.date + 'T00:00:00');
+        const amt = getEffectiveAmount(source, payDate);
         const minFutureBalance = suffixMin[i];
-        const balanceIfSkipped = Math.round((minFutureBalance - source.amount) * 100) / 100;
+        const balanceIfSkipped = Math.round((minFutureBalance - amt) * 100) / 100;
         result.push({
           date:            day.date,
           sourceId:        source.id,
           sourceName:      source.name,
-          amount:          source.amount,
+          amount:          amt,
           isSkippable:     balanceIfSkipped >= 0,
           balanceIfSkipped
         });

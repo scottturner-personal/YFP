@@ -62,7 +62,7 @@ const DEFAULTS = {
     { id: 'bill-011', name: 'Selina Loan',  amount: 228.97,  due_date: 15, recurrence: 'monthly', category: 'Housing',       active_months: null }
   ],
   income: [
-    { id: 'income-001', name: 'Scott', amount: 1270.00, pay_date: 23,                            recurrence: 'monthly',      type: 'monthly'      },
+    { id: 'income-001', name: 'Scott', amount: 1270.00, pay_date: 23,                            recurrence: 'monthly',      type: 'monthly',      amount_overrides: {} },
     { id: 'income-002', name: 'Jess',  amount: 900.00,  pay_date_start: '2026-03-27',            recurrence: 'every_4_weeks', type: 'every_4_weeks', skipped_dates: ['2026-03-27'] }
   ]
 };
@@ -195,15 +195,16 @@ app.put('/api/income/:id', (req, res) => {
   const idx = data.income.findIndex(s => s.id === req.params.id);
   if (idx === -1) return res.status(404).json({ error: 'Income source not found' });
 
-  const { name, amount, type, pay_date, pay_date_start, recurrence, skipped_dates } = req.body;
+  const { name, amount, type, pay_date, pay_date_start, recurrence, skipped_dates, amount_overrides } = req.body;
   const source = data.income[idx];
-  if (name           !== undefined) source.name           = name;
-  if (amount         !== undefined) source.amount         = parseFloat(amount);
-  if (type           !== undefined) source.type           = type;
-  if (recurrence     !== undefined) source.recurrence     = recurrence;
-  if (pay_date       !== undefined) source.pay_date       = parseInt(pay_date, 10);
-  if (pay_date_start !== undefined) source.pay_date_start = pay_date_start;
-  if (skipped_dates  !== undefined) source.skipped_dates  = skipped_dates;
+  if (name              !== undefined) source.name              = name;
+  if (amount            !== undefined) source.amount            = parseFloat(amount);
+  if (type              !== undefined) source.type              = type;
+  if (recurrence        !== undefined) source.recurrence        = recurrence;
+  if (pay_date          !== undefined) source.pay_date          = parseInt(pay_date, 10);
+  if (pay_date_start    !== undefined) source.pay_date_start    = pay_date_start;
+  if (skipped_dates     !== undefined) source.skipped_dates     = skipped_dates;
+  if (amount_overrides  !== undefined) source.amount_overrides  = amount_overrides;
 
   writeData(data);
   res.json(source);

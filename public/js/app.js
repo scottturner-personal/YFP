@@ -117,10 +117,19 @@ function renderAlertBanner(dailyProj) {
   }
 }
 
+function effectiveIncomeAmount(source) {
+  if (source.amount_overrides) {
+    const now = new Date();
+    const key = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+    if (key in source.amount_overrides) return source.amount_overrides[key];
+  }
+  return source.amount;
+}
+
 function renderOverviewCards() {
   const balance = appData.current_balance;
 
-  const avgIncome    = appData.income.reduce((t, s) => t + s.amount, 0);
+  const avgIncome    = appData.income.reduce((t, s) => t + effectiveIncomeAmount(s), 0);
   const avgOutgoings = Object.values(Projection.getCategoryBreakdown(appData.bills))
     .reduce((sum, v) => sum + v, 0);
   const net = avgIncome - avgOutgoings;
@@ -165,8 +174,14 @@ function renderNextEventCards() {
     document.getElementById('next-bill-days').textContent   = daysLabel(nextBill.daysUntil);
   }
   if (nextPay) {
+    const nextPayDate = new Date(nextPay.date + 'T00:00:00');
+    let nextPayAmount = nextPay.source.amount;
+    if (nextPay.source.amount_overrides) {
+      const key = nextPayDate.getFullYear() + '-' + String(nextPayDate.getMonth() + 1).padStart(2, '0');
+      if (key in nextPay.source.amount_overrides) nextPayAmount = nextPay.source.amount_overrides[key];
+    }
     document.getElementById('next-pay-name').textContent   = nextPay.source.name;
-    document.getElementById('next-pay-amount').textContent = fmtGBP(nextPay.source.amount);
+    document.getElementById('next-pay-amount').textContent = fmtGBP(nextPayAmount);
     document.getElementById('next-pay-date').textContent   = formatDate(nextPay.date);
     document.getElementById('next-pay-days').textContent   = daysLabel(nextPay.daysUntil);
   }
@@ -654,7 +669,7 @@ async function addBillCard() {
 
 function renderConfigureSummary() {
   if (!appData) return;
-  const totalIn  = appData.income.reduce((t, s) => t + s.amount, 0);
+  const totalIn  = appData.income.reduce((t, s) => t + effectiveIncomeAmount(s), 0);
   const totalOut = Object.values(Projection.getCategoryBreakdown(appData.bills))
     .reduce((t, v) => t + v, 0);
   const net = totalIn - totalOut;

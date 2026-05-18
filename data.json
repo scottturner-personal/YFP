@@ -1,6 +1,6 @@
 {
-  "current_balance": 1103.67,
-  "balance_as_of": "2026-03-16",
+  "current_balance": 1274.23,
+  "balance_as_of": "2026-04-15",
   "bills": [
     {
       "id": "bill-001",
@@ -68,7 +68,7 @@
     {
       "id": "bill-008",
       "name": "Home Insurance",
-      "amount": 30,
+      "amount": 23.2,
       "due_date": 28,
       "recurrence": "monthly",
       "category": "Insurance",
@@ -117,10 +117,13 @@
     {
       "id": "income-001",
       "name": "Scott",
-      "amount": 1240,
+      "amount": 1270,
       "pay_date": 23,
       "recurrence": "monthly",
-      "type": "monthly"
+      "type": "monthly",
+      "amount_overrides": {
+        "2026-04": 1240
+      }
     },
     {
       "id": "income-002",
