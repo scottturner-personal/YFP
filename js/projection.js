@@ -66,6 +66,11 @@ const Projection = (() => {
     return bill.active_months === null || bill.active_months.includes(monthNum1);
   }
 
+  // True when the bill has an end_date and the given Date is after it.
+  function isBillExpired(bill, date) {
+    return !!bill.end_date && toDateStr(date) > bill.end_date;
+  }
+
   // Returns the next Date (>= fromDate) when a bill fires, or null.
   // Walks forward month by month, skipping months excluded by active_months.
   function nextBillFireDate(bill, fromDate) {
@@ -81,6 +86,7 @@ const Projection = (() => {
       const fireDay  = effectiveDay(bill.due_date, yr, mo0);
       const fireDate = nextWorkingDay(new Date(yr, mo0, fireDay));
 
+      if (isBillExpired(bill, fireDate)) return null;
       if (fireDate >= fromDate) return fireDate;
     }
     return null;
@@ -162,6 +168,7 @@ const Projection = (() => {
           if (!isBillActiveInMonth(bill, moNum)) continue;
           const nomDay   = effectiveDay(bill.due_date, yr, mo0);
           const fireDate = nextWorkingDay(new Date(yr, mo0, nomDay));
+          if (isBillExpired(bill, fireDate)) continue;
           const key      = toDateStr(fireDate);
           if (!billFireMap.has(key)) billFireMap.set(key, []);
           billFireMap.get(key).push(bill);
@@ -386,12 +393,16 @@ const Projection = (() => {
     const mo0   = now.getMonth();
     const moNum = mo0 + 1;
 
+    const monthDate = new Date(yr, mo0, 1);
     const expenses = data.bills.reduce(
-      (sum, bill) => sum + (isBillActiveInMonth(bill, moNum) ? bill.amount : 0),
+      (sum, bill) => sum + (
+        isBillActiveInMonth(bill, moNum) && !isBillExpired(bill, monthDate)
+          ? bill.amount
+          : 0
+      ),
       0
     );
 
-    const monthDate = new Date(yr, mo0, 1);
     const income = data.income.reduce((sum, source) => {
       if (source.type === 'monthly') return sum + getEffectiveAmount(source, monthDate);
       if (source.type === 'every_4_weeks') {

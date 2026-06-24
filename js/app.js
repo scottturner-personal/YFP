@@ -565,6 +565,11 @@ function buildBillCard(bill) {
         <span class="cfg-field-label">Category</span>
         <select class="cfg-select" data-field="category">${catOptions}</select>
       </div>
+      <div class="cfg-field-group">
+        <span class="cfg-field-label">Ends</span>
+        <input type="date" class="cfg-date-input" data-field="end_date"
+               value="${bill.end_date ?? ''}">
+      </div>
     </div>
     <div class="cfg-card-schedule">
       <label class="cfg-all-year-label">
@@ -590,6 +595,9 @@ function buildBillCard(bill) {
 
   // Category select
   card.querySelector('[data-field="category"]').addEventListener('change', () => saveBillCard(card));
+
+  // End-date picker
+  card.querySelector('[data-field="end_date"]').addEventListener('change', () => saveBillCard(card));
 
   // Blur autosave + Escape-to-revert on text/number fields
   ['name','amount','due_date'].forEach(field => {
@@ -635,13 +643,16 @@ function saveBillCard(card) {
     activeMonths = (checked.length === 0 || checked.length === 12) ? null : checked;
   }
 
+  const endDateVal = card.querySelector('[data-field="end_date"]').value || null;
+
   store.updateBill(id, {
     name:          nameVal,
     amount:        amountVal,
     due_date:      Math.min(28, Math.max(1, parseInt(card.querySelector('[data-field="due_date"]').value) || 1)),
     recurrence:    'monthly',
     category:      card.querySelector('[data-field="category"]').value,
-    active_months: activeMonths
+    active_months: activeMonths,
+    end_date:      endDateVal
   });
 }
 
