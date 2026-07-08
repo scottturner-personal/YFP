@@ -16,7 +16,8 @@ const SEED_DATA = {
     { id: 'bill-008', name: 'Home Insurance', amount: 23.2,    due_date: 28, recurrence: 'monthly', category: 'Insurance',     active_months: null },
     { id: 'bill-009', name: 'Council Tax',    amount: 321,     due_date: 15, recurrence: 'monthly', category: 'Housing',       active_months: [1,4,5,6,7,8,9,10,11,12] },
     { id: 'bill-010', name: 'Life Insurance', amount: 34.36,   due_date: 16, recurrence: 'monthly', category: 'Insurance',     active_months: null },
-    { id: 'bill-011', name: 'Selina Loan',    amount: 228.97,  due_date: 15, recurrence: 'monthly', category: 'Housing',       active_months: null, end_date: '2026-07-31' }
+    { id: 'bill-011', name: 'Selina Loan',    amount: 228.97,  due_date: 15, recurrence: 'monthly', category: 'Housing',       active_months: null, end_date: '2026-07-31' },
+    { id: 'bill-012', name: 'Income Protection', amount: 40,   due_date: 1,  recurrence: 'monthly', category: 'Insurance',     active_months: null }
   ],
   income: [
     { id: 'income-001', name: 'Scott', amount: 1300, pay_date: 23,                  recurrence: 'monthly',       type: 'monthly',       amount_overrides: {} },
