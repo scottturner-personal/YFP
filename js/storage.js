@@ -20,7 +20,7 @@ const SEED_DATA = {
     { id: 'bill-012', name: 'Income Protection', amount: 40,   due_date: 1,  recurrence: 'monthly', category: 'Insurance',     active_months: null }
   ],
   income: [
-    { id: 'income-001', name: 'Scott', amount: 1300, pay_date: 23,                  recurrence: 'monthly',       type: 'monthly',       amount_overrides: {} },
+    { id: 'income-001', name: 'Scott', amount: 1340, pay_date: 23,                  recurrence: 'monthly',       type: 'monthly',       amount_overrides: {} },
     { id: 'income-002', name: 'Jess',  amount: 900,  pay_date_start: '2026-03-27',  recurrence: 'every_4_weeks', type: 'every_4_weeks', skipped_dates: ['2026-12-04','2027-12-03','2028-11-03'] },
     { id: 'income-003', name: 'Kevin', amount: 200,  pay_date: 3,                   recurrence: 'monthly',       type: 'monthly',       amount_overrides: {} }
   ]
