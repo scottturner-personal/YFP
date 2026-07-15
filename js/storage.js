@@ -11,7 +11,7 @@ const SEED_DATA = {
     { id: 'bill-003', name: 'Water',          amount: 75,      due_date: 8,  recurrence: 'monthly', category: 'Utilities',     active_months: null },
     { id: 'bill-004', name: 'Gas & Electric', amount: 250,     due_date: 27, recurrence: 'monthly', category: 'Utilities',     active_months: null },
     { id: 'bill-005', name: 'O2 Sim',         amount: 5,       due_date: 5,  recurrence: 'monthly', category: 'Subscriptions', active_months: null },
-    { id: 'bill-006', name: 'Virgin Media',   amount: 97,      due_date: 1,  recurrence: 'monthly', category: 'Utilities',     active_months: null },
+    { id: 'bill-006', name: 'Virgin Media',   amount: 111,     due_date: 1,  recurrence: 'monthly', category: 'Utilities',     active_months: null },
     { id: 'bill-007', name: 'Pet Insurance',  amount: 104,     due_date: 16, recurrence: 'monthly', category: 'Insurance',     active_months: null },
     { id: 'bill-008', name: 'Home Insurance', amount: 23.2,    due_date: 28, recurrence: 'monthly', category: 'Insurance',     active_months: null },
     { id: 'bill-009', name: 'Council Tax',    amount: 321,     due_date: 15, recurrence: 'monthly', category: 'Housing',       active_months: [1,4,5,6,7,8,9,10,11,12] },
