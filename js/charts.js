@@ -185,7 +185,7 @@ const Charts = (() => {
     const data = {
       labels,
       datasets: [{
-        data,
+        data: values,
         backgroundColor: colors.map(c => c + '33'),  // 20% opacity fill
         borderColor:     colors,
         borderWidth:     2,
@@ -193,8 +193,6 @@ const Charts = (() => {
         hoverBorderWidth: 3
       }]
     };
-
-    data.datasets[0].data = values;
 
     const options = {
       responsive:          true,

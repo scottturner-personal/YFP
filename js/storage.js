@@ -3,8 +3,8 @@
 const STORAGE_KEY = 'fvp.data.v2';
 
 const SEED_DATA = {
-  current_balance: 1829,
-  balance_as_of: '2026-07-15',
+  current_balance: 2054,
+  balance_as_of: '2026-09-11',
   bills: [
     { id: 'bill-001', name: 'Mortgage',       amount: 1570.80, due_date: 1,  recurrence: 'monthly', category: 'Housing',       active_months: null },
     { id: 'bill-002', name: 'TV License',     amount: 14.95,   due_date: 8,  recurrence: 'monthly', category: 'Subscriptions', active_months: null },
@@ -16,10 +16,10 @@ const SEED_DATA = {
     { id: 'bill-008', name: 'Home Insurance', amount: 23.2,    due_date: 28, recurrence: 'monthly', category: 'Insurance',     active_months: null },
     { id: 'bill-009', name: 'Council Tax',    amount: 321,     due_date: 15, recurrence: 'monthly', category: 'Housing',       active_months: [1,4,5,6,7,8,9,10,11,12] },
     { id: 'bill-010', name: 'Life Insurance', amount: 34.36,   due_date: 16, recurrence: 'monthly', category: 'Insurance',     active_months: null },
-    { id: 'bill-012', name: 'Income Protection', amount: 40,   due_date: 1,  recurrence: 'monthly', category: 'Insurance',     active_months: null }
+    { id: 'bill-012', name: 'Income Protection', amount: 13,   due_date: 1,  recurrence: 'monthly', category: 'Insurance',     active_months: null, end_date: null }
   ],
   income: [
-    { id: 'income-001', name: 'Scott', amount: 1370, pay_date: 23,                  recurrence: 'monthly',       type: 'monthly',       amount_overrides: {} },
+    { id: 'income-001', name: 'Scott', amount: 1320, pay_date: 23,                  recurrence: 'monthly',       type: 'monthly',       amount_overrides: {} },
     { id: 'income-002', name: 'Jess',  amount: 900,  pay_date_start: '2026-03-27',  recurrence: 'every_4_weeks', type: 'every_4_weeks', skipped_dates: ['2026-12-04','2027-12-03','2028-11-03'] },
     { id: 'income-003', name: 'Kevin', amount: 200,  pay_date: 3,                   recurrence: 'monthly',       type: 'monthly',       amount_overrides: {} }
   ]
