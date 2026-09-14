@@ -1,6 +1,6 @@
 // storage.js — StorageManager: localStorage-backed state with reactive listeners
 
-const STORAGE_KEY = 'fvp.data.v3';
+const STORAGE_KEY = 'fvp.data.v4';
 
 const SEED_DATA = {
   current_balance: 2954,
@@ -19,7 +19,7 @@ const SEED_DATA = {
     { id: 'bill-012', name: 'Income Protection', amount: 13,   due_date: 1,  recurrence: 'monthly', category: 'Insurance',     active_months: null, end_date: null }
   ],
   income: [
-    { id: 'income-001', name: 'Scott', amount: 1320, pay_date: 23,                  recurrence: 'monthly',       type: 'monthly',       amount_overrides: {} },
+    { id: 'income-001', name: 'Scott', amount: 1330, pay_date: 23,                  recurrence: 'monthly',       type: 'monthly',       amount_overrides: {} },
     { id: 'income-002', name: 'Jess',  amount: 900,  pay_date_start: '2026-03-27',  recurrence: 'every_4_weeks', type: 'every_4_weeks', skipped_dates: ['2026-12-04','2027-12-03','2028-11-03'] },
     { id: 'income-003', name: 'Kevin', amount: 200,  pay_date: 3,                   recurrence: 'monthly',       type: 'monthly',       amount_overrides: {} }
   ]
