@@ -1,6 +1,6 @@
 // storage.js — StorageManager: localStorage-backed state with reactive listeners
 
-const STORAGE_KEY = 'fvp.data.v2';
+const STORAGE_KEY = 'fvp.data.v3';
 
 const SEED_DATA = {
   current_balance: 2054,
@@ -10,7 +10,7 @@ const SEED_DATA = {
     { id: 'bill-002', name: 'TV License',     amount: 14.95,   due_date: 8,  recurrence: 'monthly', category: 'Subscriptions', active_months: null },
     { id: 'bill-003', name: 'Water',          amount: 75,      due_date: 8,  recurrence: 'monthly', category: 'Utilities',     active_months: null },
     { id: 'bill-004', name: 'Gas & Electric', amount: 250,     due_date: 27, recurrence: 'monthly', category: 'Utilities',     active_months: null },
-    { id: 'bill-005', name: 'O2 Sim',         amount: 5,       due_date: 5,  recurrence: 'monthly', category: 'Subscriptions', active_months: null },
+    { id: 'bill-005', name: 'O2 Sim',         amount: 8,       due_date: 5,  recurrence: 'monthly', category: 'Subscriptions', active_months: null },
     { id: 'bill-006', name: 'Virgin Media',   amount: 111,     due_date: 1,  recurrence: 'monthly', category: 'Utilities',     active_months: null },
     { id: 'bill-007', name: 'Pet Insurance',  amount: 104,     due_date: 16, recurrence: 'monthly', category: 'Insurance',     active_months: null },
     { id: 'bill-008', name: 'Home Insurance', amount: 23.2,    due_date: 28, recurrence: 'monthly', category: 'Insurance',     active_months: null },
