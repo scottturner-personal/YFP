@@ -3,8 +3,8 @@
 const STORAGE_KEY = 'fvp.data.v3';
 
 const SEED_DATA = {
-  current_balance: 2054,
-  balance_as_of: '2026-09-11',
+  current_balance: 2954,
+  balance_as_of: '2026-09-14',
   bills: [
     { id: 'bill-001', name: 'Mortgage',       amount: 1570.80, due_date: 1,  recurrence: 'monthly', category: 'Housing',       active_months: null },
     { id: 'bill-002', name: 'TV License',     amount: 14.95,   due_date: 8,  recurrence: 'monthly', category: 'Subscriptions', active_months: null },
